@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Absen</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              ABSEN LAB ROBOTIK QR CODE
+            </div>
+            <div class="card-body">
+              <div id="reader"></div>
+              <div class="mt-3">
+                <h4>SCAN RESULT</h4>
+                <div id="result">Result Here</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center my-5">
+        <div class="col-md-6">
+          <div
+            class="alert alert-success alert-dismissible fade show d-none my-alert"
+            role="alert"
+          >
+            <strong>Jangan Lupa!</strong> Kerja Kerja Kerja🐱‍🏍
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <form
+                method="post"
+                action="https://script.google.com/macros/s/AKfycbz2btQSpdUjgA6jbtKPNvU33ysvrolqeTT981PLPTN4EjBYeHlWeEt8NZ53WnqLQBlN/exec"
+                id="my-form"
+              >
+                <div class="mb-3">
+                  <label for="name" class="form-label">Name</label>
+                  <div class="name_form" id="name_form"></div>
+                </div>
+
+                <!-- <div class="mb-3">
+                  <label for="date" class="form-label">Date</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="date"
+                    name="date"
+                  />
+                </div> -->
+                <div class="mb-3">
+                  <label for="uid" class="form-label">UID</label>
+                  <div class="uid_form" id="uid_form"></div>
+                  <!-- <
+                    input type="text" class="form-control" id="uid" name="" /> -->
+                </div>
+                <div class="mb-3">
+                  <label for="time_in" class="form-label">Time In</label>
+                  <div class="timein_form" id="timein_form"></div>
+                </div>
+                <div class="mb-3">
+                  <label for="time_out" class="form-label">Time Out</label>
+                  <div class="timeout_form" id="timeout_form"></div>
+                </div>
+                <div class="mb-3">
+                  <label for="duration" class="form-label">Durasi</label>
+                  <div class="duration" id="duration"></div>
+                </div>
+
+                <button type="submit" class="btn btn-success btn-kirim">
+                  Kirim
+                </button>
+                <button
+                  class="btn btn-success btn-loading d-none"
+                  type="button"
+                  disabled
+                >
+                  <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Loading...
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap JS and Dependencies -->
+    <script
+      src="https://unpkg.com/html5-qrcode"
+      type="text/javascript"
+    ></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@zxing/library@3.0.0"></script>
+    <script src="https://cdn.rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bs5-lightbox@1.8.3/dist/index.bundle.min.js"></script>
+
+    <script>
+      let currentTime = new Date();
+      let randomDecimal = Math.random();
+      let hours = currentTime.getHours();
+      let minutes = currentTime.getMinutes();
+      let timeout_hour = 18;
+      let timeout_minute = Math.floor(randomDecimal * 11) + 5;
+
+      let durasiJam = timeout_hour - hours;
+      let durasiMenit;
+
+      if (timeout_minute >= minutes) {
+        durasiMenit = timeout_minute - minutes;
+      } else {
+        durasiMenit = 60 + timeout_minute - minutes;
+        durasiJam--; // Kurangi satu jam karena penanganan menit
+      }
+
+      function onScanSuccess(qrCodeMessage) {
+        document.getElementById("result").innerHTML =
+          '<span class="result bg-success text-white">' +
+          qrCodeMessage +
+          "</span>";
+
+        if (qrCodeMessage === "Imam") {
+          // console.log("imam");
+          document.getElementById("name_form").innerHTML =
+            '<input type="text" class="form-control" id="Imam Abdul F" name="Name" placeholder="Imam Abdul F" value="Imam Abdul F"/>';
+          document.getElementById("uid_form").innerHTML =
+            '<input type="text" class="form-control" id="C31285DF" name="UID" placeholder="C31285DF" value="C31285DF"/>';
+          document.getElementById("timein_form").innerHTML =
+            '<input type="text" class="form-control" id="masuk" name="Time In" placeholder="' +
+            hours +
+            ":" +
+            minutes +
+            '" value="' +
+            hours +
+            ":" +
+            minutes +
+            '"/>';
+          document.getElementById("timeout_form").innerHTML =
+            '<input type="text" class="form-control" id="pulang" name="Time Out" placeholder="' +
+            timeout_hour +
+            ":" +
+            timeout_minute +
+            '" value="' +
+            timeout_hour +
+            ":" +
+            timeout_minute +
+            '"/>';
+          document.getElementById("duration").innerHTML =
+            '<input type="text" class="form-control" id="Duration" name="Duration" placeholder="' +
+            durasiJam +
+            ":" +
+            durasiMenit +
+            '" value="' +
+            durasiJam +
+            ":" +
+            durasiMenit +
+            '"/>';
+        } else if (qrCodeMessage === "Arief") {
+          document.getElementById("name_form").innerHTML =
+            '<input type="text" class="form-control" id="Fadillah Arief" name="Name" placeholder="Fadillah Arief" value="Fadillah Arief"/>';
+          document.getElementById("uid_form").innerHTML =
+            '<input type="text" class="form-control" id="A365B1E0" name="UID" placeholder="A365B1E0" value="A365B1E0"/>';
+          document.getElementById("timein_form").innerHTML =
+            '<input type="text" class="form-control" id="masuk" name="Time In" placeholder="' +
+            hours +
+            ":" +
+            minutes +
+            '" value="' +
+            hours +
+            ":" +
+            minutes +
+            '"/>';
+          document.getElementById("timeout_form").innerHTML =
+            '<input type="text" class="form-control" id="pulang" name="Time Out" placeholder="' +
+            timeout_hour +
+            ":" +
+            timeout_minute +
+            '" value="' +
+            timeout_hour +
+            ":" +
+            timeout_minute +
+            '"/>';
+          document.getElementById("duration").innerHTML =
+            '<input type="text" class="form-control" id="Duration" name="Duration" placeholder="' +
+            durasiJam +
+            ":" +
+            durasiMenit +
+            '" value="' +
+            durasiJam +
+            ":" +
+            durasiMenit +
+            '"/>';
+        } else if (qrCodeMessage === "Fachri") {
+          document.getElementById("name_form").innerHTML =
+            '<input type="text" class="form-control" id="Fachri Ali A" name="Name" placeholder="Fachri Ali A" value="Fachri Ali A"/>';
+          document.getElementById("uid_form").innerHTML =
+            '<input type="text" class="form-control" id="633D11E0" name="UID" placeholder="633D11E0" value="633D11E0"/>';
+          document.getElementById("timein_form").innerHTML =
+            '<input type="text" class="form-control" id="masuk" name="Time In" placeholder="' +
+            hours +
+            ":" +
+            minutes +
+            '" value="' +
+            hours +
+            ":" +
+            minutes +
+            '"/>';
+          document.getElementById("timeout_form").innerHTML =
+            '<input type="text" class="form-control" id="pulang" name="Time Out" placeholder="' +
+            timeout_hour +
+            ":" +
+            timeout_minute +
+            '" value="' +
+            timeout_hour +
+            ":" +
+            timeout_minute +
+            '"/>';
+          document.getElementById("duration").innerHTML =
+            '<input type="text" class="form-control" id="Duration" name="Duration" placeholder="' +
+            durasiJam +
+            ":" +
+            durasiMenit +
+            '" value="' +
+            durasiJam +
+            ":" +
+            durasiMenit +
+            '"/>';
+        } else if (qrCodeMessage === "Redi") {
+          document.getElementById("name_form").innerHTML =
+            '<input type="text" class="form-control" id="Redi Ahmad S" name="Name" placeholder="Redi Ahmad S" value="Redi Ahmad S"/>';
+          document.getElementById("uid_form").innerHTML =
+            '<input type="text" class="form-control" id="338EB6E0" name="UID" placeholder="338EB6E0" value="338EB6E0"/>';
+          document.getElementById("timein_form").innerHTML =
+            '<input type="text" class="form-control" id="masuk" name="Time In" placeholder="' +
+            hours +
+            ":" +
+            minutes +
+            '" value="' +
+            hours +
+            ":" +
+            minutes +
+            '"/>';
+          document.getElementById("timeout_form").innerHTML =
+            '<input type="text" class="form-control" id="pulang" name="Time Out" placeholder="' +
+            timeout_hour +
+            ":" +
+            timeout_minute +
+            '" value="' +
+            timeout_hour +
+            ":" +
+            timeout_minute +
+            '"/>';
+          document.getElementById("duration").innerHTML =
+            '<input type="text" class="form-control" id="Duration" name="Duration" placeholder="' +
+            durasiJam +
+            ":" +
+            durasiMenit +
+            '" value="' +
+            durasiJam +
+            ":" +
+            durasiMenit +
+            '"/>';
+        } else if (qrCodeMessage === "Taufik") {
+          document.getElementById("name_form").innerHTML =
+            '<input type="text" class="form-control" id="M Taufik Ramadhan" name="Name" placeholder="M Taufik Ramadhan" value="M Taufik Ramadhan"/>';
+          document.getElementById("uid_form").innerHTML =
+            '<input type="text" class="form-control" id="D3EFC2E0" name="UID" placeholder="D3EFC2E0" value="D3EFC2E0"/>';
+          document.getElementById("timein_form").innerHTML =
+            '<input type="text" class="form-control" id="masuk" name="Time In" placeholder="' +
+            hours +
+            ":" +
+            minutes +
+            '" value="' +
+            hours +
+            ":" +
+            minutes +
+            '"/>';
+          document.getElementById("timeout_form").innerHTML =
+            '<input type="text" class="form-control" id="pulang" name="Time Out" placeholder="' +
+            timeout_hour +
+            ":" +
+            timeout_minute +
+            '" value="' +
+            timeout_hour +
+            ":" +
+            timeout_minute +
+            '"/>';
+          document.getElementById("duration").innerHTML =
+            '<input type="text" class="form-control" id="Duration" name="Duration" placeholder="' +
+            durasiJam +
+            ":" +
+            durasiMenit +
+            '" value="' +
+            durasiJam +
+            ":" +
+            durasiMenit +
+            '"/>';
+        } else {
+          console.log("Uhuuuuyyyy");
+        }
+
+        // console.log("QR Code Message:", qrCodeMessage);
+      }
+
+      function onScanError(errorMessage) {
+        // document.getElementById("result").innerHTML =
+        //   '<span class="result bg-success text-white">' +
+        //   "scan tidak terddeteksi" +
+        //   "</span>";
+      }
+
+      var html5QrcodeScanner = new Html5QrcodeScanner("reader", {
+        fps: 10,
+        qrbox: 250,
+      });
+      html5QrcodeScanner.render(onScanSuccess, onScanError);
+    </script>
+
+    <script>
+      window.addEventListener("load", function () {
+        const form = document.getElementById("my-form");
+        const btnKirim = document.querySelector(".btn-kirim");
+        const btnLoading = document.querySelector(".btn-loading");
+        const myAlert = document.querySelector(".my-alert");
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const data = new FormData(form);
+          const action = e.target.action;
+
+          // ketika tombol submit diklik
+          // tampilkan tombol loading, hilangkan tombol kirim
+          btnLoading.classList.toggle("d-none");
+          btnKirim.classList.toggle("d-none");
+
+          fetch(action, {
+            method: "POST",
+            body: data,
+          })
+            .then(() => {
+              alert("Konfirmasi kehadiran berhasil terkirim!");
+              // ketika tombol submit diklik
+              // tampilkan tombol kirim, hilangkan tombol loading
+              btnLoading.classList.toggle("d-none");
+              btnKirim.classList.toggle("d-none");
+              myAlert.classList.toggle("d-none");
+            })
+            .catch((error) => {
+              alert("Konfirmasi kehadiran GAGAL!!!");
+            });
+        });
+      });
+    </script>
+  </body>
+</html>
