@@ -127,6 +127,7 @@
       let hours = currentTime.getHours();
       let minutes = currentTime.getMinutes();
       let timeout_hour = 18;
+      let timeout_hours = currentTime.setHours(currentTime.getHours() + 9);
       let timeout_minute = Math.floor(randomDecimal * 11) + 5;
 
       let durasiJam = timeout_hour - hours;
