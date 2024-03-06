@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="" name="description" />
+    <title>dashboard</title>
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600&family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icon Font Stylesheet -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+
+    <!-- Libraries Stylesheet -->
+    <!-- <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet" /> -->
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Template Stylesheet -->
+    <link href="style.css" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <!-- Navbar & Hero Start -->
+    <div class="container-fluid position-relative p-0">
+      <nav
+        class="navbar transparent navbar-expand-lg navbar-light mt-1 px-4 px-lg-5 py-2 py-lg-0"
+      >
+        <div>
+          <a href="index.html" class="navbar-brand p-0">
+            <img src="img/ugl.png" alt="Logo" width="100" />
+          </a>
+        </div>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarCollapse"
+        >
+          <span class="fa fa-bars"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <div class="navbar-nav ms-auto py-0">
+            <a href="index.html" class="nav-item nav-link active">Home</a>
+            <a href="home.html" class="nav-item nav-link">About</a>
+            <!-- <a href="services.html" class="nav-item nav-link">Services</a> -->
+            <a href="packages.html" class="nav-item nav-link">Qr Code Scan</a>
+          </div>
+          <a
+            href="dashboard.html"
+            class="btn btn-primary rounded-pill py-2 px-4 ms-lg-4"
+            >Logout</a
+          >
+        </div>
+      </nav>
+    </div>
+    <div class="container mt-5">
+      <h1>Dashboard absen</h1>
+      <div id="output" class="mt-4"></div>
+    </div>
+
+    <!-- Bootstrap JS and Fetch API -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Fungsi untuk mengambil data dari API
+      function fetchData() {
+        const apiUrl =
+          "https://script.googleusercontent.com/a/macros/admin.paud.belajar.id/echo?user_content_key=K4dzhm-BVd890orn3xksKVeywaG9DkttfK5q3i6nCdRQ006fshATKh2XAUQ4qmUz0uUEolrjjc9ZYOBg_5Fv0PHJt6igJ71mOJmA1Yb3SEsKFZqtv3DaNYcMrmhZHmUMi80zadyHLKCeLrnLuKOPQ5s_MOqlAyxsocMgXXJDTllLhyHCd5hHa_MszGt9Dl-796WambirUiyu_YLZGoofgLv2Bvo1YErci1jok8PXYPiRFChEEfDZ6ObzVDHYAFEX_6uMYhagPuNyyo9iWtVdw5qBASd6hfbB&lib=MqsxGvRMzIPRSsa0YTNROggbkmF5gXqFx";
+
+        fetch(apiUrl)
+          .then((response) => response.json())
+          .then((data) => displayData(data))
+          .catch((error) => console.error("Error fetching data:", error));
+      }
+
+      // Fungsi untuk menampilkan data ke dalam elemen HTML
+      function displayData(data) {
+        const outputDiv = document.getElementById("output");
+
+        if (data && data.content && data.content.length > 0) {
+          const headers = data.content[0];
+          const content = data.content.slice(1); // Mengambil baris ke-2 dan seterusnya
+
+          let outputHTML = '<table class="table"><thead><tr>';
+
+          // Menampilkan header
+          headers.forEach((header) => {
+            outputHTML += `<th scope="col">${header}</th>`;
+          });
+
+          outputHTML += "</tr></thead><tbody>";
+
+          // Menampilkan isi data
+          content.forEach((row) => {
+            outputHTML += "<tr>";
+            row.forEach((cell) => {
+              outputHTML += `<td>${cell}</td>`;
+            });
+            outputHTML += "</tr>";
+          });
+
+          outputHTML += "</tbody></table>";
+
+          outputDiv.innerHTML = outputHTML;
+        } else {
+          outputDiv.textContent = "No data found.";
+        }
+      }
+
+      // Memanggil fungsi fetchData saat halaman dimuat
+      fetchData();
+    </script>
+  </body>
+</html>
