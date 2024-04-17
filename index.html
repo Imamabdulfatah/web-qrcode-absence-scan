@@ -182,17 +182,24 @@
       let randomDecimal = Math.random();
       let hours = currentTime.getHours();
       let minutes = currentTime.getMinutes();
-      let timeout_hour = hours + 9;
-      let timeout_minute = Math.floor(randomDecimal * 11) + 5;
 
-      let durasiJam = timeout_hour - hours;
+      // Menambah 9 jam dan menggunakan modulus untuk menjaga rentang waktu 24 jam
+      let timeout_hour = (hours + 9) % 24;
+      let timeout_minute = Math.floor(randomDecimal * 11) + 5; // Menambah 5 sampai 15 menit secara acak
+
+      let durasiJam = (timeout_hour - hours + 24) % 24; // Pastikan durasi jam tidak negatif
       let durasiMenit;
 
       if (timeout_minute >= minutes) {
         durasiMenit = timeout_minute - minutes;
       } else {
         durasiMenit = 60 + timeout_minute - minutes;
-        durasiJam--; // Kurangi satu jam karena penanganan menit
+        durasiJam = (durasiJam - 1 + 24) % 24; // Kurangi satu jam dan handle wrap-around
+      }
+
+      // Fungsi untuk format dua digit
+      function formatTwoDigits(n) {
+        return n.toString().padStart(2, "0");
       }
 
       function onScanSuccess(qrCodeMessage) {
@@ -201,229 +208,60 @@
           qrCodeMessage +
           "</span>";
 
+        let name, uid;
         if (qrCodeMessage === "Imam") {
-          // console.log("imam");
-          document.getElementById("name_form").innerHTML =
-            '<input type="text" class="form-control" id="Imam Abdul F" name="Name" placeholder="Imam Abdul F" value="Imam Abdul F"/>';
-          document.getElementById("uid_form").innerHTML =
-            '<input type="text" class="form-control" id="C31285DF" name="UID" placeholder="C31285DF" value="C31285DF"/>';
-          document.getElementById("timein_form").innerHTML =
-            '<input type="text" class="form-control" id="masuk" name="Time In" placeholder="' +
-            hours +
-            ":" +
-            minutes +
-            '" value="' +
-            hours +
-            ":" +
-            minutes +
-            '"/>';
-          document.getElementById("timeout_form").innerHTML =
-            '<input type="text" class="form-control" id="pulang" name="Time Out" placeholder="' +
-            timeout_hour +
-            ":" +
-            timeout_minute +
-            '" value="' +
-            timeout_hour +
-            ":" +
-            timeout_minute +
-            '"/>';
-          document.getElementById("duration").innerHTML =
-            '<input type="text" class="form-control" id="Duration" name="Duration" placeholder="' +
-            durasiJam +
-            ":" +
-            durasiMenit +
-            '" value="' +
-            durasiJam +
-            ":" +
-            durasiMenit +
-            '"/>';
+          name = "Imam Abdul F";
+          uid = "C31285DF";
         } else if (qrCodeMessage === "Arief") {
-          document.getElementById("name_form").innerHTML =
-            '<input type="text" class="form-control" id="Fadillah Arief" name="Name" placeholder="Fadillah Arief" value="Fadillah Arief"/>';
-          document.getElementById("uid_form").innerHTML =
-            '<input type="text" class="form-control" id="A365B1E0" name="UID" placeholder="A365B1E0" value="A365B1E0"/>';
-          document.getElementById("timein_form").innerHTML =
-            '<input type="text" class="form-control" id="masuk" name="Time In" placeholder="' +
-            hours +
-            ":" +
-            minutes +
-            '" value="' +
-            hours +
-            ":" +
-            minutes +
-            '"/>';
-          document.getElementById("timeout_form").innerHTML =
-            '<input type="text" class="form-control" id="pulang" name="Time Out" placeholder="' +
-            timeout_hour +
-            ":" +
-            timeout_minute +
-            '" value="' +
-            timeout_hour +
-            ":" +
-            timeout_minute +
-            '"/>';
-          document.getElementById("duration").innerHTML =
-            '<input type="text" class="form-control" id="Duration" name="Duration" placeholder="' +
-            durasiJam +
-            ":" +
-            durasiMenit +
-            '" value="' +
-            durasiJam +
-            ":" +
-            durasiMenit +
-            '"/>';
-        } else if (qrCodeMessage === "Fachri") {
-          document.getElementById("name_form").innerHTML =
-            '<input type="text" class="form-control" id="Fachri Ali A" name="Name" placeholder="Fachri Ali A" value="Fachri Ali A"/>';
-          document.getElementById("uid_form").innerHTML =
-            '<input type="text" class="form-control" id="633D11E0" name="UID" placeholder="633D11E0" value="633D11E0"/>';
-          document.getElementById("timein_form").innerHTML =
-            '<input type="text" class="form-control" id="masuk" name="Time In" placeholder="' +
-            hours +
-            ":" +
-            minutes +
-            '" value="' +
-            hours +
-            ":" +
-            minutes +
-            '"/>';
-          document.getElementById("timeout_form").innerHTML =
-            '<input type="text" class="form-control" id="pulang" name="Time Out" placeholder="' +
-            timeout_hour +
-            ":" +
-            timeout_minute +
-            '" value="' +
-            timeout_hour +
-            ":" +
-            timeout_minute +
-            '"/>';
-          document.getElementById("duration").innerHTML =
-            '<input type="text" class="form-control" id="Duration" name="Duration" placeholder="' +
-            durasiJam +
-            ":" +
-            durasiMenit +
-            '" value="' +
-            durasiJam +
-            ":" +
-            durasiMenit +
-            '"/>';
-        } else if (qrCodeMessage === "Redi") {
-          document.getElementById("name_form").innerHTML =
-            '<input type="text" class="form-control" id="Redi Ahmad S" name="Name" placeholder="Redi Ahmad S" value="Redi Ahmad S"/>';
-          document.getElementById("uid_form").innerHTML =
-            '<input type="text" class="form-control" id="338EB6E0" name="UID" placeholder="338EB6E0" value="338EB6E0"/>';
-          document.getElementById("timein_form").innerHTML =
-            '<input type="text" class="form-control" id="masuk" name="Time In" placeholder="' +
-            hours +
-            ":" +
-            minutes +
-            '" value="' +
-            hours +
-            ":" +
-            minutes +
-            '"/>';
-          document.getElementById("timeout_form").innerHTML =
-            '<input type="text" class="form-control" id="pulang" name="Time Out" placeholder="' +
-            timeout_hour +
-            ":" +
-            timeout_minute +
-            '" value="' +
-            timeout_hour +
-            ":" +
-            timeout_minute +
-            '"/>';
-          document.getElementById("duration").innerHTML =
-            '<input type="text" class="form-control" id="Duration" name="Duration" placeholder="' +
-            durasiJam +
-            ":" +
-            durasiMenit +
-            '" value="' +
-            durasiJam +
-            ":" +
-            durasiMenit +
-            '"/>';
-        } else if (qrCodeMessage === "Taufik") {
-          document.getElementById("name_form").innerHTML =
-            '<input type="text" class="form-control" id="M Taufik Ramadhan" name="Name" placeholder="M Taufik Ramadhan" value="M Taufik Ramadhan"/>';
-          document.getElementById("uid_form").innerHTML =
-            '<input type="text" class="form-control" id="D3EFC2E0" name="UID" placeholder="D3EFC2E0" value="D3EFC2E0"/>';
-          document.getElementById("timein_form").innerHTML =
-            '<input type="text" class="form-control" id="masuk" name="Time In" placeholder="' +
-            hours +
-            ":" +
-            minutes +
-            '" value="' +
-            hours +
-            ":" +
-            minutes +
-            '"/>';
-          document.getElementById("timeout_form").innerHTML =
-            '<input type="text" class="form-control" id="pulang" name="Time Out" placeholder="' +
-            timeout_hour +
-            ":" +
-            timeout_minute +
-            '" value="' +
-            timeout_hour +
-            ":" +
-            timeout_minute +
-            '"/>';
-          document.getElementById("duration").innerHTML =
-            '<input type="text" class="form-control" id="Duration" name="Duration" placeholder="' +
-            durasiJam +
-            ":" +
-            durasiMenit +
-            '" value="' +
-            durasiJam +
-            ":" +
-            durasiMenit +
-            '"/>';
+          name = "Fadillah Arief";
+          uid = "A365B1E0";
         } else if (qrCodeMessage === "Tegar") {
-          document.getElementById("name_form").innerHTML =
-            '<input type="text" class="form-control" id="M Tegar Ramadhan" name="Name" placeholder="M Tegar Ramadhan" value="M Tegar Ramadhan"/>';
-          document.getElementById("uid_form").innerHTML =
-            '<input type="text" class="form-control" id="A31B25DF" name="UID" placeholder="A31B25DF" value="A31B25DF"/>';
-          document.getElementById("timein_form").innerHTML =
-            '<input type="text" class="form-control" id="masuk" name="Time In" placeholder="' +
-            hours +
-            ":" +
-            minutes +
-            '" value="' +
-            hours +
-            ":" +
-            minutes +
-            '"/>';
-          document.getElementById("timeout_form").innerHTML =
-            '<input type="text" class="form-control" id="pulang" name="Time Out" placeholder="' +
-            timeout_hour +
-            ":" +
-            timeout_minute +
-            '" value="' +
-            timeout_hour +
-            ":" +
-            timeout_minute +
-            '"/>';
-          document.getElementById("duration").innerHTML =
-            '<input type="text" class="form-control" id="Duration" name="Duration" placeholder="' +
-            durasiJam +
-            ":" +
-            durasiMenit +
-            '" value="' +
-            durasiJam +
-            ":" +
-            durasiMenit +
-            '"/>';
+          name = "M Tegar Ramadhan";
+          uid = "A31B25DF";
+        } else if (qrCodeMessage === "Fachri") {
+          name = "Fachri Ali A";
+          uid = "633D11E0";
+        } else if (qrCodeMessage === "Taufik") {
+          name = "M Taufik Ramadhan";
+          uid = "D3EFC2E0";
         } else {
           console.log("Uhuuuuyyyy");
+          return; // Return jika QR code tidak dikenal
         }
 
-        // console.log("QR Code Message:", qrCodeMessage);
+        // Menggunakan template literals untuk membersihkan duplikasi
+        document.getElementById(
+          "name_form"
+        ).innerHTML = `<input type="text" class="form-control" id="${name.replace(
+          / /g,
+          "_"
+        )}" name="Name" placeholder="${name}" value="${name}"/>`;
+        document.getElementById(
+          "uid_form"
+        ).innerHTML = `<input type="text" class="form-control" id="${uid}" name="UID" placeholder="${uid}" value="${uid}"/>`;
+        document.getElementById(
+          "timein_form"
+        ).innerHTML = `<input type="text" class="form-control" id="masuk" name="Time In" placeholder="${formatTwoDigits(
+          hours
+        )}:${formatTwoDigits(minutes)}" value="${formatTwoDigits(
+          hours
+        )}:${formatTwoDigits(minutes)}"/>`;
+        document.getElementById(
+          "timeout_form"
+        ).innerHTML = `<input type="text" class="form-control" id="pulang" name="Time Out" placeholder="${formatTwoDigits(
+          timeout_hour
+        )}:${formatTwoDigits(timeout_minute)}" value="${formatTwoDigits(
+          timeout_hour
+        )}:${formatTwoDigits(timeout_minute)}"/>`;
+        document.getElementById(
+          "duration"
+        ).innerHTML = `<input type="text" class="form-control" id="Duration" name="Duration" placeholder="${durasiJam}:${formatTwoDigits(
+          durasiMenit
+        )}" value="${durasiJam}:${formatTwoDigits(durasiMenit)}"/>`;
       }
 
       function onScanError(errorMessage) {
-        // document.getElementById("result").innerHTML =
-        //   '<span class="result bg-success text-white">' +
-        //   "scan tidak terddeteksi" +
-        //   "</span>";
+        console.log("Scan Error:", errorMessage);
       }
 
       var html5QrcodeScanner = new Html5QrcodeScanner("reader", {
