@@ -44,7 +44,7 @@ function doGet(e) {
   if (e.parameter == "undefined") {
     result = "No_Parameters";
   } else {
-    var sheet_id = "1p0Qj87CC843kRjNfST_bokNO8J9Zy04m1m1l2tc7WM0"; // Spreadsheet ID.
+    var sheet_id = "YOUR_SPREADSHEET_ID"; // Spreadsheet ID.
     var sheet_UD = "User_Data"; // Sheet name for user data.
     var sheet_AT = "Attendance"; // Sheet name for attendance.
 
